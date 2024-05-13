@@ -1,0 +1,35 @@
+version: '3'
+services:
+  ecommerce:
+    build:
+      context: .
+    image: audiophile-ecommerce
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/hr-sales
+        # Handles the command used to run the project in the Docker container.
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+
+    
+  # db:
+  #   image: postgres
+  #   volumes:
+  #     - ./data/db:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_DB=postgres
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  # web:
+  #   build: .
+  #   command: python manage.py runserver 0.0.0.0:8000
+  #   volumes:
+  #     - .:/code
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - POSTGRES_NAME=postgres
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #   depends_on:
+  #     - db
