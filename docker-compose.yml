@@ -1,0 +1,37 @@
+version: '3'
+services:
+  ecommerce:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: audiophile-ecommerce:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:12345@db:5432/ecommerce_db
+    networks:
+      - ecommerce-network
+    volumes:
+      - .:/hr-sales
+        # Handles the command used to run the project in the Docker container.
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    networks:
+      - ecommerce-network
+networks:
+  ecommerce-network:
+volumes:
+  db_data:
